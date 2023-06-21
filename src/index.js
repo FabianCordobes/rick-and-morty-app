@@ -3,30 +3,16 @@ import './index.css';
 import App from './App';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
-
+import store from './redux/store';
+import { Provider } from 'react-redux';
 
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
 
 root.render(
-	<Router>
-		<App />
-	</Router>
+	<Provider store={store}>
+		<Router>
+			<App />
+		</Router>
+	</Provider>
 );
-
-/*
-TODO: versión 18 --> createRoot(rootElement)
-import ReactDOM from 'react-dom';
-import { unstable_createRoot as createRoot } from 'react-dom'; // Nueva API en React 18
-
-import './index.css';
-import App from './App';
-
-const rootElement = document.getElementById('root');
-
-*Utiliza createRoot en lugar de render para habilitar la nueva API de renderizado en React 18
-const root = createRoot(rootElement);
-
-*Renderiza el componente App dentro del elemento root
-root.render(<App />);
-*/

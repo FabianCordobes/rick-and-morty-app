@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { validation } from './validation';
 import './Form.css';
 
-export default function Form() {
+export default function Form({ login }) {
 	const [userData, setUserData] = useState({
 		email: '',
 		password: '',
@@ -25,8 +25,9 @@ export default function Form() {
 			validationErrors.hasOwnProperty('email') ||
 			validationErrors.hasOwnProperty('password')
 		) {
-			alert('error');
-		} else alert('Esta todo bien');
+			return;
+		}
+		login(userData); //else alert('Esta todo bien');
 	};
 
 	return (
@@ -59,7 +60,7 @@ export default function Form() {
 				className={
 					userData.email.length < 1 || userData.password.length < 1
 						? 'invalid-data'
-						: 'valid.data'
+						: 'valid-data'
 				}
 				disabled={userData.email.length < 1 || userData.password.length < 1}
 			>

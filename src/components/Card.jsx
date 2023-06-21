@@ -1,24 +1,39 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './Card.css';
-
 import { Link } from 'react-router-dom';
 
-export default function Card({ char, onClose, seteandoTitle }) {
-	// obj
-	const { id, name, gender, species, origin, image, status } = char;
+import { connect } from 'react-redux';
+import { addFav, removeFav } from '../redux/action';
+
+function Card({ char, onClose, seteandoTitle, addFav, removeFav, myFavorites }) {
+
+	const { id, name, gender, species, image } = char;
+
+	const [isFav, setIsFav] = useState(false);
+
+	const handleFavorite = function() {
+		if (isFav) {
+			setIsFav(false);
+			removeFav(id);
+		} else {
+			setIsFav(true);
+			addFav(char);
+		}
+	};
+
+
 
 	useEffect(() => {
-		seteandoTitle('jujuuu el component Card se ha montado y ya hemos iniciado');
-	}, []); // Mount
-
-	useEffect(() => {
-		return function () {
-			seteandoTitle('bye bye nos hemos desmontado');
-		};
-	}, []); // willMount
+		myFavorites.forEach((fav) => {
+			if (fav.id === id) {
+				setIsFav(true);
+			}
+		});
+	}, [myFavorites]);
 
 	return (
 		<div className="card">
+			<button onClick={handleFavorite}>{isFav ? '❤️' : '🤍'}</button>
 			<div className="close">
 				<button onClick={() => onClose(id)}>X</button>
 			</div>
@@ -38,3 +53,26 @@ export default function Card({ char, onClose, seteandoTitle }) {
 		</div>
 	);
 }
+
+
+
+
+
+function mapStateToProps (state) {
+	return {
+		myFavorites: state.myFavorites,
+	};
+};
+
+function mapDispatchToProps (dispatch) {
+	return {
+		addFav: function(char) {
+			dispatch(addFav(char));
+		},
+		removeFav: function(id){
+			dispatch(removeFav(id));
+		},
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Card);

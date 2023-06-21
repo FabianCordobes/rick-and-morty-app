@@ -8,10 +8,12 @@ export default function NavBar({ onSearch }) {
 
 	return (
 		<div className="nav">
-			<Hamburger
-				toggled={isOpen}
-				toggle={setOpen}
-			/>
+			<div className="hamburguer-menu">
+				<Hamburger
+					toggled={isOpen}
+					toggle={setOpen}
+				/>
+			</div>
 			{isOpen && <div>hola</div>}
 			<Link to={'/'}>
 				<div>LogOut</div>
@@ -21,6 +23,9 @@ export default function NavBar({ onSearch }) {
 			</Link>
 			<Link to={'/about'}>
 				<div>About</div>
+			</Link>
+			<Link to={'/favorites'}>
+				<div>Favorites</div>
 			</Link>
 			<SearchBar onSearch={onSearch} />
 		</div>
