@@ -1,5 +1,6 @@
 var http = require('http');
 const characters = require('./utils/data.js');
+const getCharById = require('./controllers/getCharById.js');
 
 const PORT = 3001;
 
@@ -15,13 +16,7 @@ const server = http
 
 			// Convertir el id de la URL a número
 			const numId = parseInt(characterId);
-
-			// Buscar el personaje por su id dentro del archivo data.js
-			const character = characters.find((char) => char.id === numId);
-
-			// Enviar el personaje como respuesta en formato JSON
-			res.writeHead(200, { 'Content-Type': 'application/json' });
-			res.end(JSON.stringify(character));
+			getCharById(res, numId);
 		} else {
 			// Si la URL no incluye "/rickandmorty/character", responder con un mensaje de error
 			res.writeHead(404, { 'Content-Type': 'text/plain' });
