@@ -1,31 +1,25 @@
-var http = require('http');
-const characters = require('./utils/data.js');
-const getCharById = require('./controllers/getCharById.js');
-
+const express = require('express');
+const server = express();
+const router = require('./routes/index');
+const morgan = require('morgan');
 const PORT = 3001;
 
-const server = http
-	.createServer((req, res) => {
-		res.setHeader('Access-Control-Allow-Origin', '*');
+server.use(express.json());
 
-		// Verificar si la URL incluye "/rickandmorty/character"
-		if (req.url.includes('/rickandmorty/character')) {
-			const parts = req.url.split('/');
-			const idIndex = parts.indexOf('character') + 1;
-			const characterId = parts[idIndex];
+server.use(morgan('dev'));
 
-			// Convertir el id de la URL a número
-			const numId = parseInt(characterId);
-			getCharById(res, numId);
-		} else {
-			// Si la URL no incluye "/rickandmorty/character", responder con un mensaje de error
-			res.writeHead(404, { 'Content-Type': 'text/plain' });
-			res.end('Error: La URL no incluye "/rickandmorty/character"');
-		}
-	})
-	.listen(PORT, 'localhost');
+server.use((req, res, next) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Credentials', 'true');
+	res.header(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept'
+	);
+	res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+	next();
+});
+server.use('/rickandmorty', router);
 
-/* ⚠️ LA LÍNEA SIGUIENTE TIENE QUE QUEDAR COMO ESTÁ PARA PODER EXPORTAR EL SERVIDOR ⚠️ */
-module.exports =
-	/* AQUÍ DEBAJO YA PUEDES ESCRIBIR TÚ CÓDIGO REEMPLAZANDO EL VALOR DE NULL POR EL SERVIDOR */
-	server;
+server.listen(PORT, () => {
+	console.log('Server raised in port: ' + PORT);
+});
